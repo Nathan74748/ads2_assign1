@@ -271,6 +271,45 @@ void updateCarDetails() {
 }
 
 
+void loadCarsFromFile() {
+    // Open file.
+    FILE* file = fopen("car.dat", "rb");
+    if (!file) {
+
+        printf("Car list doesn't exist. You will need to input cars.\n");
+        return;
+    }
+    struct car tmpCar;
+    while (fread(&tmpCar, sizeof(struct car), 1, file)) {
+        struct car* newCar = (struct car*)malloc(sizeof(struct car));
+        *newCar = tmpCar;
+        newCar->next = start; 
+        start = newCar;
+        count++; 
+    }
+    fclose(file); 
+    printf("System has been populated with cars from the data file.\n");
+}
+
+
+void saveCarsToFile() {
+
+    FILE* file = fopen("car.dat", "wb");
+    if (!file) {
+        // cant add if file won't open.
+        printf("Failed to open file for writing.\n");
+        return;
+    }
+    struct car* temp = start;
+    // add each car to file.
+    while (temp) {
+        fwrite(temp, sizeof(struct car), 1, file); // save car.
+        temp = temp->next; // next car.
+    }
+    fclose(file); 
+    printf("All cars have been saved to the file.\n");
+}
+
 // Main  menu
 void mainMenu() {
     int choice;
@@ -292,6 +331,8 @@ void mainMenu() {
 
 
 int main() {
+    loadCarsFromFile();// load at the start 
     mainMenu();
+    saveCarsToFile();
     return 0;
 }
