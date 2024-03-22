@@ -1,0 +1,22 @@
+﻿  CarManagement.cpp
+D:\adsassign1\CarManagement\CarManagement.cpp(56,17): warning C4477: 'scanf_s' : format string '%9s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  D:\adsassign1\CarManagement\CarManagement.cpp(56,17):
+  this argument is used as a buffer size
+  
+D:\adsassign1\CarManagement\CarManagement.cpp(66,13): warning C4477: 'scanf_s' : format string '%49s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  D:\adsassign1\CarManagement\CarManagement.cpp(66,13):
+  this argument is used as a buffer size
+  
+D:\adsassign1\CarManagement\CarManagement.cpp(68,13): warning C4477: 'scanf_s' : format string '%19s' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+  D:\adsassign1\CarManagement\CarManagement.cpp(68,13):
+  this argument is used as a buffer size
+  
+D:\adsassign1\CarManagement\CarManagement.cpp(90,13): warning C4473: 'scanf_s' : not enough arguments passed for format string
+  D:\adsassign1\CarManagement\CarManagement.cpp(90,13):
+  placeholders and their parameters expect 2 variadic arguments, but 1 were provided
+  D:\adsassign1\CarManagement\CarManagement.cpp(90,13):
+  the missing variadic argument 2 is required by format string '%9s'
+  D:\adsassign1\CarManagement\CarManagement.cpp(90,13):
+  this argument is used as a buffer size
+  
+  CarManagement.vcxproj -> D:\adsassign1\CarManagement\x64\Debug\CarManagement.exe
