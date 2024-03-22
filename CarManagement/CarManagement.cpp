@@ -83,11 +83,11 @@ void add() {
     printf("Car added successfully!\n");
 }
 
-// Sell a reserved car
+//sell a reserved car
 void sell() {
     char reg[10];
     printf("Enter the registration number of the car to sell: ");
-    scanf_s("%9s", reg);
+    scanf_s("%9s", reg, (unsigned)_countof(reg));
     struct car* temp = start, * prev = NULL;
     while (temp != NULL && strcmp(temp->reg, reg) != 0) {
         prev = temp;
@@ -101,31 +101,76 @@ void sell() {
         printf("Car is not reserved and cannot be sold.\n");
         return;
     }
-    // Remove the car from the list
+    // remove the car from the list
     if (prev == NULL) {
         start = temp->next;
     }
-    else { // The car removed is first
+    else {
         prev->next = temp->next;
     }
-    free(temp); // Free the memory allocated for the sold car
-    count--; // Decrease the car count
+    free(temp);
+    count--;
     printf("Car sold successfully.\n");
+}
+
+void reserveUnreserveCar() {
+    char reg[10];
+    int choice;
+    printf("1 for reserve, 2 for unreserve: ");
+    scanf_s("%d", &choice, sizeof(choice)); // get user choice
+
+    printf("Enter car reg: ");
+    scanf_s("%9s", reg, sizeof(reg)); // get reg
+
+    struct car* c = findCar(reg); // find car
+    if (!c) {
+        printf("Car not found\n");
+        return; 
+    }
+
+    if (choice == 1) { // reserve
+        if (c->reserved) {
+            printf("Already reserved\n");
+            return; // check if already reserved
+        }
+        printf("Reserve price (500-1500): ");
+        scanf_s("%d", &c->reservePrice, sizeof(c->reservePrice)); // get reserve price
+        if (c->reservePrice < 500 || c->reservePrice > 1500) {
+            printf("Invalid price\n");
+            return;
+        }
+        c->reserved = true; // set reserved
+        printf("Car reserved\n");
+    }
+    else if (choice == 2) { // unreserve
+        if (!c->reserved) {
+            printf("Not reserved\n");
+            return;
+        }
+        c->reserved = false; 
+        c->reservePrice = 0; // reset price
+        printf("Car unreserved\n");
+    }
+    else {
+        printf("Invalid choice\n"); // invalid choice
+    }
 }
 // Main interaction menu
 void mainMenu() {
     int choice;
     do {
-        printf("1. Add a car\n2. Sell a car\n3. Quit\nEnter choice: ");
-        scanf_s("%d", &choice);
+        printf("1. Add car\n2. Sell car\n3. Reserve/Unreserve\n4. Quit\nChoice: ");
+        scanf_s("%d", &choice, sizeof(choice)); // main menu
         switch (choice) {
         case 1: add(); break;
         case 2: sell(); break;
-        case 3: break;
-        default: printf("Invalid choice. Please try again.\n");
+        case 3: reserveUnreserveCar(); break;
+        case 4: break; // exit
+        default: printf("Wrong choice\n"); 
         }
-    } while (choice != 3);
+    } while (choice != 4);
 }
+
 
 int main() {
     mainMenu();
