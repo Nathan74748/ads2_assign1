@@ -155,20 +155,94 @@ void reserveUnreserveCar() {
         printf("Invalid choice\n"); // invalid choice
     }
 }
-// Main interaction menu
+
+// Function to view all cars or cars based on a specific condition
+void viewCars() {
+    int choice;
+    printf("Choose option:\n1. View all cars\n2. View non-reserved cars\n3. View cars by make\n4. View cars by color\nChoice: ");
+    scanf_s("%d", &choice, sizeof(choice));
+    getchar(); // clear buffer
+
+    struct car* temp = start;
+    char input[50]; // for storing user input for make or color
+
+    switch (choice) {
+    case 1: // View all cars
+        while (temp) {
+            printf("%s, %s, %s, %d previous owner(s), %s, Reserve Price: %d\n",
+                temp->reg, temp->makeModel, temp->color, temp->prevOwners,
+                temp->reserved ? "Reserved" : "Not Reserved", temp->reservePrice);
+            temp = temp->next;
+        }
+        break;
+    case 2: // View non-reserved cars
+        while (temp) {
+            if (!temp->reserved) {
+                printf("%s, %s, %s, %d previous owner(s)\n", temp->reg, temp->makeModel, temp->color, temp->prevOwners);
+            }
+            temp = temp->next;
+        }
+        break;
+    case 3: // View cars by make
+        printf("Enter make to view: ");
+        scanf_s("%49s", input, sizeof(input));
+        while (temp) {
+            if (strcmp(temp->makeModel, input) == 0) {
+                printf("%s, %s, %s, %d previous owner(s)\n", temp->reg, temp->makeModel, temp->color, temp->prevOwners);
+            }
+            temp = temp->next;
+        }
+        break;
+    case 4: // View cars by color
+        printf("Enter color to view: ");
+        scanf_s("%19s", input, sizeof(input));
+        while (temp) {
+            if (strcmp(temp->color, input) == 0) {
+                printf("%s, %s, %s, %d previous owner(s)\n", temp->reg, temp->makeModel, temp->color, temp->prevOwners);
+            }
+            temp = temp->next;
+        }
+        break;
+    default:
+        printf("Invalid choice\n");
+    }
+}
+
+// Function to view a specific car
+void viewSpecificCar() {
+    char reg[10];
+    printf("Enter car registration to view: ");
+    scanf_s("%9s", reg, sizeof(reg));
+    getchar(); // clear buffer
+
+    struct car* car = findCar(reg);
+    if (car) {
+        printf("Registration: %s, Make & Model: %s, Color: %s, Previous Owners: %d, %s, Reserve Price: %d\n",
+            car->reg, car->makeModel, car->color, car->prevOwners,
+            car->reserved ? "Reserved" : "Not Reserved", car->reservePrice);
+    }
+    else {
+        printf("Car not found.\n");
+    }
+}
+
+
+// Main  menu
 void mainMenu() {
     int choice;
     do {
-        printf("1. Add car\n2. Sell car\n3. Reserve/Unreserve\n4. Quit\nChoice: ");
-        scanf_s("%d", &choice, sizeof(choice)); // main menu
+        printf("1. Add car\n2. Sell car\n3. Reserve/Unreserve\n4. View cars\n5. View a specific car\n6. Quit\nChoice: ");
+        scanf_s("%d", &choice, sizeof(choice));
         switch (choice) {
         case 1: add(); break;
         case 2: sell(); break;
         case 3: reserveUnreserveCar(); break;
-        case 4: break; // exit
-        default: printf("Wrong choice\n"); 
+        case 4: viewCars(); break;
+        case 5: viewSpecificCar(); break; 
+        case 6: break; // exit
+        default: printf("Wrong choice\n");
         }
-    } while (choice != 4);
+    } while (choice != 6);
 }
 
 
