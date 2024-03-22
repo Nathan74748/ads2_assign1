@@ -156,7 +156,7 @@ void reserveUnreserveCar() {
     }
 }
 
-// Function to view all cars or cars based on a specific condition
+
 void viewCars() {
     int choice;
     printf("Choose option:\n1. View all cars\n2. View non-reserved cars\n3. View cars by make\n4. View cars by color\nChoice: ");
@@ -175,7 +175,7 @@ void viewCars() {
             temp = temp->next;
         }
         break;
-    case 2: // View non-reserved cars
+    case 2: // view non-reserved cars
         while (temp) {
             if (!temp->reserved) {
                 printf("%s, %s, %s, %d previous owner(s)\n", temp->reg, temp->makeModel, temp->color, temp->prevOwners);
@@ -183,7 +183,7 @@ void viewCars() {
             temp = temp->next;
         }
         break;
-    case 3: // View cars by make
+    case 3: // view cars by make
         printf("Enter make to view: ");
         scanf_s("%49s", input, sizeof(input));
         while (temp) {
@@ -226,23 +226,68 @@ void viewSpecificCar() {
     }
 }
 
+// Function to update car details
+void updateCarDetails() {
+    char reg[10];
+    printf("Enter the registration number of the car to update: ");
+    scanf_s("%9s", reg, sizeof(reg));
+    getchar(); // clean buffer after input
+
+    struct car* carToUpdate = findCar(reg);
+    if (!carToUpdate) {
+        printf("Car not found.\n");
+        return;
+    }
+
+    // update make and model
+    printf("Enter new Make and Model: ");
+    scanf_s("%49s", carToUpdate->makeModel, sizeof(carToUpdate->makeModel));
+    getchar(); // clear buffer after input
+
+    // update Color
+    printf("Enter new Color: ");
+    scanf_s("%19s", carToUpdate->color, sizeof(carToUpdate->color));
+    getchar(); // clear buffer after input
+
+    printf("Enter number of Previous Owners (0-3): ");
+    scanf_s("%d", &carToUpdate->prevOwners);
+    getchar(); // clear buffer after input
+
+
+    printf("Is the car Reserved? (1 for Yes, 0 for No): ");
+    scanf_s("%d", (int*)&carToUpdate->reserved);
+    getchar(); // clear buffer after input
+
+    if (carToUpdate->reserved) {
+        printf("Enter new Reserve Price: ");
+        scanf_s("%d", &carToUpdate->reservePrice);
+        getchar(); // clean buffer after input
+    }
+    else {
+        carToUpdate->reservePrice = 0; // reset reserve price if car is not reserved
+    }
+
+    printf("Car details updated successfully.\n");
+}
+
 
 // Main  menu
 void mainMenu() {
     int choice;
     do {
-        printf("1. Add car\n2. Sell car\n3. Reserve/Unreserve\n4. View cars\n5. View a specific car\n6. Quit\nChoice: ");
+        printf("1. Add car\n2. Sell car\n3. Reserve/Unreserve\n4. View cars\n5. View a specific car\n6. Update Car Details\n7. Quit\nChoice: ");
         scanf_s("%d", &choice, sizeof(choice));
         switch (choice) {
         case 1: add(); break;
         case 2: sell(); break;
         case 3: reserveUnreserveCar(); break;
         case 4: viewCars(); break;
-        case 5: viewSpecificCar(); break; 
-        case 6: break; // exit
+        case 5: viewSpecificCar(); break;
+        case 6: updateCarDetails(); break; // special feasture
+        case 7: break; // Exit
         default: printf("Wrong choice\n");
         }
-    } while (choice != 6);
+    } while (choice != 7);
 }
 
 
